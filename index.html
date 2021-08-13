@@ -82,7 +82,7 @@
 					</div>
 				</div>
 			</div>
-			<form action="https://prod-40.northeurope.logic.azure.com:443/workflows/c6bed7737c51430cb402e9bd745dd612/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=La1Y7tYiOr6I-9bOv46nWkNAviG11CM5ah2p0e0_VHw" method="post">
+			<form id="testrequest">
 				Your Latitude:<br>
 				<input type="text" name="lat"><br>
 				Your Longitude:<br>
@@ -90,6 +90,17 @@
 				<br></br>
 				<input type="submit" value="Submit">
 			</form>
+			<p style="display: none;" id="notification">Thank You!</p>
+
+			<script>
+                $('#testrequest').submit(function () {
+                    var post_data = $('#testrequest').serialize();
+                    $.post('https://prod-40.northeurope.logic.azure.com:443/workflows/c6bed7737c51430cb402e9bd745dd612/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=La1Y7tYiOr6I-9bOv46nWkNAviG11CM5ah2p0e0_VHw', post_data, function (data) {
+						$('#notification').show();
+					});
+				});
+
+			</script>
 		</section>
 	    
 	    <footer class="footer text-center py-2 theme-bg-dark">
