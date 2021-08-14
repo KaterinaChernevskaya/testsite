@@ -1,21 +1,31 @@
 ﻿<!DOCTYPE html>
 <html lang="en"> 
 <head>
-    <title>Bootstrap 4 Blog Template For Developers</title>
-    
-    <!-- Meta -->
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Blog Template">
-    <meta name="author" content="Xiaoying Riley at 3rd Wave Media">    
-    <link rel="shortcut icon" href="favicon.ico"> 
-    
-    <!-- FontAwesome JS-->
-    <script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
-    
-    <!-- Theme CSS -->  
-    <link id="theme-style" rel="stylesheet" href="assets/css/theme-6.css">
+	<title>Bootstrap 4 Blog Template For Developers</title>
+
+	<!-- Meta -->
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Blog Template">
+	<meta name="author" content="Xiaoying Riley at 3rd Wave Media">
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<!-- FontAwesome JS-->
+	<script defer src="https://use.fontawesome.com/releases/v5.7.1/js/all.js" integrity="sha384-eVEQC9zshBn0rFj4+TU78eNA19HMNigMviK/PU/FFjLXqa/GKPgX58rvt5Z8PLs7" crossorigin="anonymous"></script>
+
+	<!-- Theme CSS -->
+	<link id="theme-style" rel="stylesheet" href="assets/css/theme-6.css">
+
+	<script type="text/javascript"
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCNTCkBJ8ZMmqqHzpy_nVai_uTQ8_47FVs&callback=initMap"></script>
+	<script src="https://unpkg.com/location-picker/dist/location-picker.min.js"></script>
+	<style type="text/css">
+		#map {
+			width: 100%;
+			height: 480px;
+		}
+	</style>
 
 </head> 
 
@@ -82,16 +92,52 @@
 					</div>
 				</div>
 			</div>
+
+			<div id="map"></div>
+			<br>
+			<button id="confirmPosition">Confirm Position</button>
+			<br>
+			<p>On idle position: <span id="onIdlePositionView"></span></p>
+			<p>On click position: <span id="onClickPositionView"></span></p>
+			<script>
+				// Get element references
+				var confirmBtn = document.getElementById('confirmPosition');
+				var onClickPositionView = document.getElementById('onClickPositionView');
+				var onIdlePositionView = document.getElementById('onIdlePositionView');
+
+				// Initialize locationPicker plugin
+				var lp = new locationPicker('map', {
+					setCurrentPosition: true, // You can omit this, defaults to true
+				}, {
+					zoom: 15 // You can set any google map options here, zoom defaults to 15
+				});
+
+				// Listen to button onclick event
+				confirmBtn.onclick = function () {
+					// Get current location and show it in HTML
+					var location = lp.getMarkerPosition();
+					onClickPositionView.innerHTML = 'The chosen location is ' + location.lat + ',' + location.lng;
+				};
+
+				// Listen to map idle event, listening to idle event more accurate than listening to ondrag event
+				google.maps.event.addListener(lp.map, 'idle', function (event) {
+					// Get current location and show it in HTML
+					var location = lp.getMarkerPosition();
+					onIdlePositionView.innerHTML = 'The chosen location is ' + location.lat + ',' + location.lng;
+				});
+			</script>
+
+
 			<iframe name="dummyframe" id="dummyframe" style="display: none;"></iframe>
 			<form action="https://prod-40.northeurope.logic.azure.com:443/workflows/c6bed7737c51430cb402e9bd745dd612/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=La1Y7tYiOr6I-9bOv46nWkNAviG11CM5ah2p0e0_VHw" method="post" target="dummyframe">
 				Your Latitude:<br>
-				<input type="text" name="lat"><br>
+				<input type="text" name="lat" value=location.lat><br>
 				Your Longitude:<br>
 				<input type="text" name="lon"><br>
 				<br></br>
 				<input type="submit" value="Submit">
 			</form>
-			
+
 		</section>
 	    
 	    <footer class="footer text-center py-2 theme-bg-dark">
